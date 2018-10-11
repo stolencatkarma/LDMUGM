@@ -2,16 +2,16 @@ import glooey
 import pyglet
 import argparse
 from pyglet import clock
-from pyglet.window import key as KEY  # KEY.UP
+from pyglet.window import key as KEY  # KEY.UP, KEY.B
 
 from character import Character
 from command import Command
 from Mastermind._mm_client import MastermindClientTCP
 
 pyglet.resource.path = ['gfx', 'gfx/background',
-                                'gfx/scrollbox/vbar/backward', 'gfx/scrollbox/vbar/forward','gfx/scrollbox/vbar/decoration','gfx/scrollbox/vbar/grip', 
-                                'gfx/scrollbox/frame/decoration'
-                                ]
+                        'gfx/scrollbox/vbar/backward', 'gfx/scrollbox/vbar/forward','gfx/scrollbox/vbar/decoration','gfx/scrollbox/vbar/grip', 
+                        'gfx/scrollbox/frame/decoration'
+                        ]
 pyglet.resource.reindex()
 
 class Background(glooey.Background):

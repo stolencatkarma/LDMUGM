@@ -86,11 +86,18 @@ class Server(MastermindServerTCP):
                 # get character of connection
                 self.callback_client_send(connection_object, '')
             
-            if(data.command == 'new characater'):
+            if(data.command == 'new character'):
                 # player wants to make a new character.
+                first = data.args[0]
+                last = data.args[1]
+                # after creation save it and resend them the character select screen
+                # with thr new character added
                 pass
             
-
+            if(data.command == 'request_character'):
+                # Connection is asking for us to load a charcter for them.
+                # send it to them AND load it into active characters
+                pass
 
             # all the commands that are actions need to be put into the command_queue then we will loop through the queue each turn and process the actions.
             if(data.command == 'ping'):
