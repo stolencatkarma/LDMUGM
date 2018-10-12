@@ -13,6 +13,8 @@ class Room:
         self.x = 0
         self.y = 0
         self.z = 0
+        """ combat_arena is where creatures and mobiles in this room do combat in a turn based fashion. """
+        self.combat_arena = None 
         
     def on_enter(self, object): pass
     def on_exit(self, object): pass

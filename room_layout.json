@@ -1,0 +1,24 @@
+{
+    "height_map": [
+        "76543210",
+        "76543210",
+        "76543210",
+        "76543210",
+        "76543210",
+        "76543210",
+        "76543210",
+        "76543210",
+        "76543210"
+    ],
+    
+    "terrain": [
+        "GBBBBBBG",
+        "GBBBBBBG",
+        "GBBBBBBG",
+        "GBBBBBBG",
+        "GBBBBBBG",
+        "GBBBBBBG",
+        "GBBBBBBG",
+        "GBBBBBBG"
+    ]
+}

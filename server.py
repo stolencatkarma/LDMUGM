@@ -31,48 +31,59 @@ class Server(MastermindServerTCP):
         MastermindServerTCP.__init__(self, 0.5, 0.5, 300.0)
         self.connected_characters = list()
         self.planes = dict() # Planes of existance. by str() name loaded from name.plane in /planes/ so they can be exchanged easily.
+        # self.planes['tutorial'].rooms[]
         # 
         # load the list of planes from files
         #
-        
+
     def compute_turn(self):
         # gather a list of rooms using connected players
         # for each room
             # SORT turn order by speed in BaseCreatures[]
             # for each BaseCreature check their action_queue
                 # parse 1 action or turns_until_can_act_again--
-                # send message to room of results. (no need to resend room until 
+                # send message to room of results. (no need to resend room until
                 # something moves or dies or gets picked up)
             # tick calendar for this plane.
             # weather? etc?
         pass
+
     def send_updated_room(self, plane, room):
-        #send all characters on plane and in room an updated room.
+        """ send all characters on plane and in room an updated room. """
         pass
 
     def send_message_to_room(self, plane, room, message):
-        # can be used to send a message to all characters in a room
-        # message_window for combat and feedback
+        """ Used to send a message to all characters in a room to their message_window for combat and feedback """
         pass
-        
+
     def move_object(self, object, plane, from_room, to_room):
-        # depending on the class type being moved 
+        """ move and object from one room to another within the same plane """
+        # depending on the class type being moved
         # pick the right list to to and from.
-        if(isinstance(object, BaseItem)):
+        if isinstance(object, BaseItem):
             pass
-        elif(isinstance(object, Character)):
+        elif isinstance(object, Character):
             # character move differently
             pass
-        elif(isinstance(object, BaseCreature)):
+        elif isinstance(object, BaseCreature):
             pass
 
-    def callback_client_handle(self, connection_object, data):
-        # print("Server: Recieved data \""+str(data)+"\" from client \""+str(connection_object.address)+"\".")
-        # use the data to determine what connection is giving the command and if they are logged in yet.
+    def create_room(self, plane, x, y, z):
+        pass
+    
+    def create_plane(self, name):
+        """ creates a plane of existance """
+        pass
+    
+    
 
-        if(isinstance(data, Command)): # the data we recieved was a command. process it.
-            if(data.command == 'login'):
-                if(data.args[0] == 'password'): # TODO: put an actual password system in.
+    def callback_client_handle(self, connection_object, data):
+        # print("Server: Recieved data \""+str(data)+"\" from client \")
+        # use the data to determine what connection is giving the command and if they are logged in.
+
+        if isinstance(data, Command): # the data we recieved was a command. process it.
+            if data.command == 'login':
+                if data.args[0] == 'password': # TODO: put an actual password system in.
                     print('password accepted for ' + str(data.ident))
                     # from here the connection needs to create or pick a character.
                     # login accepted. Send list of the connection's characters.
@@ -81,45 +92,48 @@ class Server(MastermindServerTCP):
                     print('password not accepted.')
                     connection_object.disconnect()
 
-            if(data.command == 'request_room'):
+            if data.command == 'request_room':
                 # sends a full update of the current room to the Connection
                 # get character of connection
                 self.callback_client_send(connection_object, '')
-            
-            if(data.command == 'new character'):
+
+            if data.command == 'new_character':
                 # player wants to make a new character.
                 first = data.args[0]
                 last = data.args[1]
                 # after creation save it and resend them the character select screen
                 # with thr new character added
-                pass
-            
-            if(data.command == 'request_character'):
+
+            if data.command == 'request_character':
                 # Connection is asking for us to load a charcter for them.
                 # send it to them AND load it into active characters
                 pass
 
-            # all the commands that are actions need to be put into the command_queue then we will loop through the queue each turn and process the actions.
-            if(data.command == 'ping'):
+            # all the commands that are actions need to be put into the command_queue then we
+            #  will loop through the queue each turn and process the actions.
+            if data.command == 'ping':
                 self.callback_client_send(connection_object, 'pong')
 
-            if(data.command == 'move'):
-                self.players[data.ident].command_queue.append(Action(self.players[data.ident], 'move', [data.args[0]]))
+            if data.command == 'move_character':
+                pass
 
-            if(data.command == 'bash'):
-                self.players[data.ident].command_queue.append(Action(self.players[data.ident], 'bash', [data.args[0]]))
+            if data.command == 'bash':
+                # characters can bash certain items to break them down for crafting.
+                pass
 
-            
-            if(data.command == 'calculated_move'): pass
+            if data.command == 'calculated_move':
+                pass
 
-            if(data.command == 'move_item_to_player_storage'): pass
+            if data.command == 'move_item_to_character_storage':
+                pass
+        else:
+            print('Connection sent invalid data.', str(data))
 
-            if(data.command == 'move_item'): pass
-
-        return super(Server,self).callback_client_handle(connection_object,data)
+        return super(Server, self).callback_client_handle(connection_object, data)
 
     def callback_client_send(self, connection_object, data, compression=True):
-        #print("Server: Sending data \""+str(data)+"\" to client \""+str(connection_object.address)+"\" with compression \""+str(compression)+"\"!")
+        #print("Server: Sending data \""+str(data)+"\" to client \""+str(connection_object.address)
+        # +"\" with compression \""+str(compression)+"\"!")
         return super(Server, self).callback_client_send(connection_object, data, compression)
 
     def callback_connect_client(self, connection_object):
@@ -133,7 +147,7 @@ class Server(MastermindServerTCP):
 
 
 
-if(__name__ == "__main__"):
+if __name__ == "__main__":
     server = Server()
     server.connect('localhost', 6456)
     server.accepting_allow()
@@ -145,9 +159,9 @@ if(__name__ == "__main__"):
     print('Started up Looming Darkness MUGM Server.')
     while dont_break:
         try:
-            while(time.time() - last_turn_time < time_offset): # try to keep up with the time offset but never go faster than it.
+            while(time.time() - last_turn_time < time_offset): # try to keep up with the time.
                 time.sleep(.001)
-            server.compute_turn() # where all queued creature actions get taken care of, as well as physics engine, light intensity, and other necessary stuff.
+            server.compute_turn() # where all queued creature actions get taken care of.
             last_turn_time = time.time() # based off of system clock.
         except KeyboardInterrupt:
             print('cleaning up before exiting.')
