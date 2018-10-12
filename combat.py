@@ -33,7 +33,8 @@ class CombatTile:
         if 'FLYING' in creature.tags:
             return int(1)
         else:
-            return int(abs(self.height - from_height)) """ move_cost can't be negative. """
+            """ move_cost can't be negative. """
+            return int(abs(self.height - from_height)) 
 
 
 
